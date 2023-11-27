@@ -76,37 +76,16 @@ const view = new MapView({
  container: "viewDiv" // Div element
 });
 
+// Create an array to store polygon vertices
+var polygonVertices = [];
+
 // Listen for click events on the map
 view.on("click", function(event) {
-      // Get the coordinates of the click
-      var coordinates = {
-        x: event.mapPoint.longitude,
-        y: event.mapPoint.latitude
-      };
-
-      // Create a point geometry
-      var point = new Point(coordinates);
-
-      // Create a symbol for the point
-      var markerSymbol = new SimpleMarkerSymbol({
-        color: [226, 119, 40],
-        outline: {
-          color: [255, 255, 255],
-          width: 2
-        },
-        size: 12
-      });
-
-      // Create a graphic to display the point
-      var graphic = new Graphic({
-        geometry: point,
-        symbol: markerSymbol
-      });
-
-      // Add the graphic to the map
-      view.graphics.removeAll();
-      view.graphics.add(graphic);
-    });
+  // Get the coordinates of the click
+  var coordinates = {
+    x: event.mapPoint.longitude,
+    y: event.mapPoint.latitude
+  };
 
 const locateBtn = new Locate({
           view: view
