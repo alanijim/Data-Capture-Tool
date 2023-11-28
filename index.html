@@ -75,71 +75,38 @@ const view = new MapView({
  zoom: 8, // Zoom level
  container: "viewDiv" // Div element
 });
-// Create an array to store polygon vertices
-var polygonVertices = [];
 
 // Listen for click events on the map
 view.on("click", function(event) {
-  // Get the coordinates of the click
-  var coordinates = {
-    x: event.mapPoint.longitude,
-    y: event.mapPoint.latitude
-  };
+      // Get the coordinates of the click
+      var coordinates = {
+        x: event.mapPoint.longitude,
+        y: event.mapPoint.latitude
+      };
 
-  // Add the coordinates to the polygonVertices array
-  polygonVertices.push(coordinates);
+      // Create a point geometry
+      var point = new Point(coordinates);
 
-  // Create a point geometry
-  var point = new Point(coordinates);
+      // Create a symbol for the point
+      var markerSymbol = new SimpleMarkerSymbol({
+        color: [226, 119, 40],
+        outline: {
+          color: [255, 255, 255],
+          width: 2
+        },
+        size: 12
+      });
 
-  // Create a symbol for the point
-  var markerSymbol = new SimpleFillSymbol({
-    color: [226, 119, 40, 0.5],
-    outline: {
-      color: [255, 255, 255],
-      width: 2
-    }
-  });
+      // Create a graphic to display the point
+      var graphic = new Graphic({
+        geometry: point,
+        symbol: markerSymbol
+      });
 
-  // Create a graphic to display the point
-  var graphic = new Graphic({
-    geometry: point,
-    symbol: markerSymbol
-  });
-
-  // Add the graphic to the map
-  view.graphics.add(graphic);
-
-  // Check if there are enough vertices to create a polygon
-  if (polygonVertices.length >= 3) {
-    // Create a polygon geometry
-    var polygon = new Polygon({
-      rings: [polygonVertices]
+      // Add the graphic to the map
+      view.graphics.removeAll();
+      view.graphics.add(graphic);
     });
-
-    // Create a symbol for the polygon
-    var polygonSymbol = new SimpleFillSymbol({
-      color: [226, 119, 40, 0.5],
-      outline: {
-        color: [255, 255, 255],
-        width: 2
-      }
-    });
-
-    // Create a graphic to display the polygon
-    var polygonGraphic = new Graphic({
-      geometry: polygon,
-      symbol: polygonSymbol
-    });
-
-    // Add the polygon graphic to the map
-    view.graphics.add(polygonGraphic);
-
-    // Clear the array for the next polygon
-    polygonVertices = [];
-  }
-});
-});
 
 const locateBtn = new Locate({
           view: view
@@ -167,7 +134,7 @@ view.ui.add(searchWidget, {
   position: "top-left",
   index: 2
 });
-     
+     });
     </script>
 
   </head>
