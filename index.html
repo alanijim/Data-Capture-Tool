@@ -76,6 +76,8 @@ const view = new MapView({
  container: "viewDiv" // Div element
 });
 
+const vertices = []; // Array to store polygon vertices
+
 // Listen for click events on the map
 view.on("click", function(event) {
       // Get the coordinates of the click
@@ -108,34 +110,34 @@ view.on("click", function(event) {
         view.graphics.removeAll();
         view.graphics.add(graphic);
 
-        // Create a polygon with a simple fill symbol (parcel)
-        const parcelSymbol = new SimpleFillSymbol({
-          color: [0, 255, 0, 0.5], // Green with 50% opacity
-          outline: {
-            color: [0, 255, 0, 1], // Green outline
-            width: 2
+         // Add the clicked point to the vertices array
+         vertices.push([coordinates.x, coordinates.y]);
+
+        // If there are at least two vertices, create a polygon
+        if (vertices.length >= 2) {
+          // Create a polygon with a simple fill symbol (parcel)
+          const parcelSymbol = new SimpleFillSymbol({
+            color: [0, 255, 0, 0.5], // Green with 50% opacity
+            outline: {
+              color: [0, 255, 0, 1], // Green outline
+              width: 2
           }
         });
 
-        // Create a polygon geometry (sample coordinates)
-        const parcelGeometry = new Polygon({
-          rings: [
-            [coordinates.x - 0.05, coordinates.y - 0.05],
-            [coordinates.x + 0.05, coordinates.y - 0.05],
-            [coordinates.x + 0.05, coordinates.y + 0.05],
-            [coordinates.x - 0.05, coordinates.y + 0.05],
-            [coordinates.x - 0.05, coordinates.y - 0.05]
-          ]
-        });
+         // Create a polygon geometry
+         const parcelGeometry = new Polygon({
+            rings: vertices
+          });
 
-        // Create a graphic for the parcel
-        const parcelGraphic = new Graphic({
-          geometry: parcelGeometry,
-          symbol: parcelSymbol
-        });
+          // Create a graphic for the parcel
+          const parcelGraphic = new Graphic({
+            geometry: parcelGeometry,
+            symbol: parcelSymbol
+          });
 
-        // Add the parcel graphic to the map
-        view.graphics.add(parcelGraphic);
+          // Add the parcel graphic to the map
+          view.graphics.add(parcelGraphic);
+        }
       });
 
       const locateBtn = new Locate({
