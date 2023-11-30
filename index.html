@@ -84,21 +84,22 @@ view.on("click", function(event) {
         y: event.mapPoint.latitude
       };
 
-      // Create a point geometry
-      var point = new Point(coordinates);
+      
+        // Create a point geometry
+        const point = new Point(coordinates);
 
-      // Create a symbol for the point
-      var markerSymbol = new SimpleMarkerSymbol({
-        color: [226, 119, 40],
-        outline: {
-          color: [255, 255, 255],
-          width: 2
-        },
-        size: 12
-      });
+        // Create a symbol for the point
+        const markerSymbol = new SimpleMarkerSymbol({
+          color: [226, 119, 40],
+          outline: {
+            color: [255, 255, 255],
+            width: 2
+          },
+          size: 12
+        });
 
-     // Create a graphic to display the point
-     const graphic = new Graphic({
+        // Create a graphic to display the point
+        const graphic = new Graphic({
           geometry: point,
           symbol: markerSymbol
         });
@@ -107,40 +108,39 @@ view.on("click", function(event) {
         view.graphics.removeAll();
         view.graphics.add(graphic);
 
-        // Create a polygon with a simple fill symbol
-        const polygonSymbol = new SimpleFillSymbol({
-          color: [255, 0, 0, 0.5], // Red with 50% opacity
+        // Create a polygon with a simple fill symbol (parcel)
+        const parcelSymbol = new SimpleFillSymbol({
+          color: [0, 255, 0, 0.5], // Green with 50% opacity
           outline: {
-            color: [255, 0, 0, 1], // Red outline
+            color: [0, 255, 0, 1], // Green outline
             width: 2
           }
         });
 
         // Create a polygon geometry (sample coordinates)
-        const polygonGeometry = new Polygon({
+        const parcelGeometry = new Polygon({
           rings: [
-            [coordinates.x - 0.1, coordinates.y - 0.1],
-            [coordinates.x + 0.1, coordinates.y - 0.1],
-            [coordinates.x + 0.1, coordinates.y + 0.1],
-            [coordinates.x - 0.1, coordinates.y + 0.1],
-            [coordinates.x - 0.1, coordinates.y - 0.1]
+            [coordinates.x - 0.05, coordinates.y - 0.05],
+            [coordinates.x + 0.05, coordinates.y - 0.05],
+            [coordinates.x + 0.05, coordinates.y + 0.05],
+            [coordinates.x - 0.05, coordinates.y + 0.05],
+            [coordinates.x - 0.05, coordinates.y - 0.05]
           ]
         });
 
-        // Create a graphic for the polygon
-        const polygonGraphic = new Graphic({
-          geometry: polygonGeometry,
-          symbol: polygonSymbol
+        // Create a graphic for the parcel
+        const parcelGraphic = new Graphic({
+          geometry: parcelGeometry,
+          symbol: parcelSymbol
         });
 
-        // Add the polygon graphic to the map
-        view.graphics.add(polygonGraphic);
+        // Add the parcel graphic to the map
+        view.graphics.add(parcelGraphic);
       });
 
       const locateBtn = new Locate({
         view: view
       });
-
        // Create featurelayer from feature service 
  const layer = new FeatureLayer({ 
   // URL to the service 
