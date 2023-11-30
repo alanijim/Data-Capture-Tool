@@ -49,8 +49,9 @@
       "esri/symbols/SimpleMarkerSymbol",
       "esri/Graphic",
       "esri/geometry/Polygon",
-      "esri/symbols/SimpleFillSymbol"
-    ], function (esriConfig, Map, MapView, Locate, Search, FeatureLayer, Point, SimpleMarkerSymbol, Graphic, Polygon, SimpleFillSymbol) {
+      "esri/symbols/SimpleFillSymbol",
+      "esri/geometry/geometryEngine"
+    ], function (esriConfig, Map, MapView, Locate, Search, FeatureLayer, Point, SimpleMarkerSymbol, Graphic, Polygon, SimpleFillSymbol, geometryEngine) {
 
       esriConfig.apiKey = "AAPK1e81a61217a9422fa3f84d70ee8da264XJEPMkrW1uZvyS3ENxn6zt0m1c31ukoI79R7CyYycjJctz4Gat9UO7KNkSVsglQn";
 
@@ -125,6 +126,11 @@
           // Add the parcel graphic to the map
           view.graphics.add(parcelGraphic);
 
+          // Calculate and display the area and distance
+          const area = geometryEngine.geodesicArea(parcelGeometry, "square-meters");
+          const length = geometryEngine.geodesicLength(parcelGeometry, "meters");
+          alert("Area: " + area.toFixed(2) + " square meters\nLength: " + length.toFixed(2) + " meters");
+
           // Clear the vertices array for the next parcel
           vertices.length = 0;
         }
@@ -156,3 +162,4 @@
   </script>
 </body>
 </html>
+
