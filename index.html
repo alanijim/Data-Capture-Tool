@@ -101,7 +101,7 @@
         vertices.push([coordinates.x, coordinates.y]);
 
         // If there are at least two vertices, create a polygon
-        if (vertices.length >= 2) {
+        if (vertices.length >= 4) {
           // Create a polygon with a simple fill symbol (parcel)
           const parcelSymbol = new SimpleFillSymbol({
             color: [0, 255, 0, 0.5], // Green with 50% opacity
