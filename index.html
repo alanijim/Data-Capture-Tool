@@ -97,20 +97,49 @@ view.on("click", function(event) {
         size: 12
       });
 
-      // Create a graphic to display the point
-      var graphic = new Graphic({
-        geometry: point,
-        symbol: markerSymbol
+     // Create a graphic to display the point
+     const graphic = new Graphic({
+          geometry: point,
+          symbol: markerSymbol
+        });
+
+        // Add the graphic to the map
+        view.graphics.removeAll();
+        view.graphics.add(graphic);
+
+        // Create a polygon with a simple fill symbol
+        const polygonSymbol = new SimpleFillSymbol({
+          color: [255, 0, 0, 0.5], // Red with 50% opacity
+          outline: {
+            color: [255, 0, 0, 1], // Red outline
+            width: 2
+          }
+        });
+
+        // Create a polygon geometry (sample coordinates)
+        const polygonGeometry = new Polygon({
+          rings: [
+            [coordinates.x - 0.1, coordinates.y - 0.1],
+            [coordinates.x + 0.1, coordinates.y - 0.1],
+            [coordinates.x + 0.1, coordinates.y + 0.1],
+            [coordinates.x - 0.1, coordinates.y + 0.1],
+            [coordinates.x - 0.1, coordinates.y - 0.1]
+          ]
+        });
+
+        // Create a graphic for the polygon
+        const polygonGraphic = new Graphic({
+          geometry: polygonGeometry,
+          symbol: polygonSymbol
+        });
+
+        // Add the polygon graphic to the map
+        view.graphics.add(polygonGraphic);
       });
 
-      // Add the graphic to the map
-      view.graphics.removeAll();
-      view.graphics.add(graphic);
-    });
-
-const locateBtn = new Locate({
-          view: view
-        });
+      const locateBtn = new Locate({
+        view: view
+      });
 
        // Create featurelayer from feature service 
  const layer = new FeatureLayer({ 
