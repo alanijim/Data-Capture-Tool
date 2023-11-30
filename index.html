@@ -95,7 +95,6 @@
         });
 
         // Add the graphic to the map
-        view.graphics.removeAll();
         view.graphics.add(graphic);
 
         // Add the clicked point to the vertices array
@@ -125,6 +124,9 @@
 
           // Add the parcel graphic to the map
           view.graphics.add(parcelGraphic);
+
+          // Clear the vertices array for the next parcel
+          vertices.length = 0;
         }
       });
 
