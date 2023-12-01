@@ -69,6 +69,7 @@
 
       const vertices = []; // Array to store polygon vertices
       let doubleClickTimer;
+      let polygonGraphics = new Graphic({});
 
       view.on("click", function (event) {
         // Get the coordinates of the click
@@ -124,13 +125,13 @@
             });
 
             // Create a graphic for the parcel
-            const parcelGraphic = new Graphic({
+            polygonGraphics = new Graphic({
               geometry: parcelGeometry,
               symbol: parcelSymbol
             });
 
             // Add the parcel graphic to the map
-            view.graphics.add(parcelGraphic);
+            view.graphics.add(polygonGraphics);
 
             // Calculate and display the area and distance
             const area = geometryEngine.geodesicArea(parcelGeometry, "square-meters");
@@ -140,6 +141,20 @@
             // Clear the vertices array for the next parcel
             vertices.length = 0;
           }, 300); // Adjust the timeout as needed
+        }
+      });
+
+      view.on("double-click", function (event) {
+        // Check if the double-click occurred on the last point
+        const lastPoint = vertices[vertices.length - 1];
+        const clickedPoint = {
+          x: event.mapPoint.longitude,
+          y: event.mapPoint.latitude
+        };
+
+        if (lastPoint && clickedPoint.x === lastPoint[0] && clickedPoint.y === lastPoint[1]) {
+          // Remove the polygon graphic
+          view.graphics.remove(polygonGraphics);
         }
       });
 
@@ -169,5 +184,4 @@
   </script>
 </body>
 </html>
-
 
