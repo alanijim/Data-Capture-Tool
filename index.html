@@ -67,8 +67,7 @@
         container: "viewDiv"
       });
 
-      let vertices = []; // Array to store polygon vertices
-      let polygonGraphics;
+      const vertices = []; // Array to store polygon vertices
 
       view.on("click", function (event) {
         // Get the coordinates of the click
@@ -102,8 +101,8 @@
         // Add the clicked point to the vertices array
         vertices.push([coordinates.x, coordinates.y]);
 
-        // If there are at least three vertices, create a polygon
-        if (vertices.length >= 2) {
+        // If there are at least two vertices, create a polygon
+        if (vertices.length >= 4) {
           // Create a polygon with a simple fill symbol (parcel)
           const parcelSymbol = new SimpleFillSymbol({
             color: [0, 255, 0, 0.5], // Green with 50% opacity
@@ -119,13 +118,13 @@
           });
 
           // Create a graphic for the parcel
-          polygonGraphics = new Graphic({
+          const parcelGraphic = new Graphic({
             geometry: parcelGeometry,
             symbol: parcelSymbol
           });
 
           // Add the parcel graphic to the map
-          view.graphics.add(polygonGraphics);
+          view.graphics.add(parcelGraphic);
 
           // Calculate and display the area and distance
           const area = geometryEngine.geodesicArea(parcelGeometry, "square-meters");
@@ -133,7 +132,7 @@
           alert("Area: " + area.toFixed(2) + " square meters\nLength: " + length.toFixed(2) + " meters");
 
           // Clear the vertices array for the next parcel
-          vertices = [];
+          vertices.length = 0;
         }
       });
 
@@ -163,5 +162,4 @@
   </script>
 </body>
 </html>
-
 
