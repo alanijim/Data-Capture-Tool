@@ -68,6 +68,7 @@
       });
 
       const vertices = []; // Array to store polygon vertices
+      const parcels = []; // Array to store created parcels
 
       view.on("click", function (event) {
         // Get the coordinates of the click
@@ -101,8 +102,8 @@
         // Add the clicked point to the vertices array
         vertices.push([coordinates.x, coordinates.y]);
 
-        // If there are at least two vertices, create a polygon
-        if (vertices.length >= 4) {
+        // If there are at least three vertices, create a polygon
+        if (vertices.length >= 3) {
           // Create a polygon with a simple fill symbol (parcel)
           const parcelSymbol = new SimpleFillSymbol({
             color: [0, 255, 0, 0.5], // Green with 50% opacity
@@ -130,6 +131,9 @@
           const area = geometryEngine.geodesicArea(parcelGeometry, "square-meters");
           const length = geometryEngine.geodesicLength(parcelGeometry, "meters");
           alert("Area: " + area.toFixed(2) + " square meters\nLength: " + length.toFixed(2) + " meters");
+
+          // Add the parcel to the parcels array
+          parcels.push(parcelGraphic);
 
           // Clear the vertices array for the next parcel
           vertices.length = 0;
@@ -162,4 +166,5 @@
   </script>
 </body>
 </html>
+
 
