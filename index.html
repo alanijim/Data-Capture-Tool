@@ -68,8 +68,6 @@
       });
 
       const vertices = []; // Array to store polygon vertices
-      let doubleClickTimer;
-      let polygonGraphics = new Graphic({});
 
       view.on("click", function (event) {
         // Get the coordinates of the click
@@ -103,58 +101,38 @@
         // Add the clicked point to the vertices array
         vertices.push([coordinates.x, coordinates.y]);
 
-        // If there are at least three vertices, create a polygon
-        if (vertices.length >= 3) {
-          // Clear previous double-click timer
-          clearTimeout(doubleClickTimer);
+        // If there are at least two vertices, create a polygon
+        if (vertices.length >= 4) {
+          // Create a polygon with a simple fill symbol (parcel)
+          const parcelSymbol = new SimpleFillSymbol({
+            color: [0, 255, 0, 0.5], // Green with 50% opacity
+            outline: {
+              color: [0, 255, 0, 1], // Green outline
+              width: 2
+            }
+          });
 
-          // Set a new double-click timer
-          doubleClickTimer = setTimeout(function () {
-            // Create a polygon with a simple fill symbol (parcel)
-            const parcelSymbol = new SimpleFillSymbol({
-              color: [0, 255, 0, 0.5], // Green with 50% opacity
-              outline: {
-                color: [0, 255, 0, 1], // Green outline
-                width: 2
-              }
-            });
+          // Create a polygon geometry
+          const parcelGeometry = new Polygon({
+            rings: vertices
+          });
 
-            // Create a polygon geometry
-            const parcelGeometry = new Polygon({
-              rings: vertices
-            });
+          // Create a graphic for the parcel
+          const parcelGraphic = new Graphic({
+            geometry: parcelGeometry,
+            symbol: parcelSymbol
+          });
 
-            // Create a graphic for the parcel
-            polygonGraphics = new Graphic({
-              geometry: parcelGeometry,
-              symbol: parcelSymbol
-            });
+          // Add the parcel graphic to the map
+          view.graphics.add(parcelGraphic);
 
-            // Add the parcel graphic to the map
-            view.graphics.add(polygonGraphics);
+          // Calculate and display the area and distance
+          const area = geometryEngine.geodesicArea(parcelGeometry, "square-meters");
+          const length = geometryEngine.geodesicLength(parcelGeometry, "meters");
+          alert("Area: " + area.toFixed(2) + " square meters\nLength: " + length.toFixed(2) + " meters");
 
-            // Calculate and display the area and distance
-            const area = geometryEngine.geodesicArea(parcelGeometry, "square-meters");
-            const length = geometryEngine.geodesicLength(parcelGeometry, "meters");
-            alert("Area: " + area.toFixed(2) + " square meters\nLength: " + length.toFixed(2) + " meters");
-
-            // Clear the vertices array for the next parcel
-            vertices.length = 0;
-          }, 300); // Adjust the timeout as needed
-        }
-      });
-
-      view.on("double-click", function (event) {
-        // Check if the double-click occurred on the last point
-        const lastPoint = vertices[vertices.length - 1];
-        const clickedPoint = {
-          x: event.mapPoint.longitude,
-          y: event.mapPoint.latitude
-        };
-
-        if (lastPoint && clickedPoint.x === lastPoint[0] && clickedPoint.y === lastPoint[1]) {
-          // Remove the polygon graphic
-          view.graphics.remove(polygonGraphics);
+          // Clear the vertices array for the next parcel
+          vertices.length = 0;
         }
       });
 
